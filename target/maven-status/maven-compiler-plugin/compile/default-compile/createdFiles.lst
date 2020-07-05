@@ -1,8 +1,0 @@
-br\com\iwe\handler\GetTripsByCountry.class
-br\com\iwe\model\HandlerResponse$Builder.class
-br\com\iwe\model\Trip.class
-br\com\iwe\model\HandlerResponse.class
-br\com\iwe\model\HandlerRequest.class
-br\com\iwe\handler\CreateTrip.class
-br\com\iwe\dao\TripRepository.class
-br\com\iwe\dao\DynamoDBManager.class
