@@ -1,4 +1,4 @@
-## AWS SAM Application for Managing Study Data Lake
+## AWS SAM Application for Trips Management
 
 This project goal is to provide simple APIs to create and list trips based on their country, city or date. It's built in Java and runs in the AWS stack, with SAM, API Gateway, Lambda and DynamoDB.
 
