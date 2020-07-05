@@ -26,17 +26,13 @@ mvn install
 **Invoking function locally through local API Gateway**
 1. Start DynamoDB Local in a Docker container. 
   - On Linux and Mac  `docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data`
-  - On Windows `docker run -p 8000:8000 -v //C/local/dynamo:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data;`
+  - On Windows `docker run -p 8000:8000 -v //C/local/dynamo:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data`
   
   As an alternative, the above command can be replaced by using the docker-compose file in this repository root directory, through the following command
   `docker-compose up -d`
   
 2. Create the DynamoDB table. 
-`aws dynamodb create-table --table-name trip \
- --attribute-definitions AttributeName=country,AttributeType=S AttributeName=travelDate,AttributeType=S AttributeName=city,AttributeType=S \
- --local-secondary-indexes 'IndexName=cityIndex,KeySchema=[{AttributeName=country,KeyType=HASH},{AttributeName=city,KeyType=RANGE}],Projection={ProjectionType=ALL}' \
- --key-schema AttributeName=country,KeyType=HASH AttributeName=travelDate,KeyType=RANGE \
- --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000`
+`aws dynamodb create-table --table-name trip --attribute-definitions AttributeName=country,AttributeType=S AttributeName=travelDate,AttributeType=S --key-schema AttributeName=country,KeyType=HASH AttributeName=travelDate,KeyType=RANGE --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000`
 
 The table can be deleted with the following command, in case it was already created before: `aws dynamodb delete-table --table-name trip --endpoint-url http://localhost:8000`
 
@@ -83,7 +79,7 @@ Next, the following command will create a Cloudformation Stack and deploy your S
 ```bash
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name study-datalake \
+    --stack-name trips-project \
     --capabilities CAPABILITY_IAM
 ```
 

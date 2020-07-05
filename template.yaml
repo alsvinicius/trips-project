@@ -7,7 +7,7 @@ Description: >
 
 Globals:
     Function:
-        Timeout: 20
+        Timeout: 40
         MemorySize: 512
         Environment:
           Variables:
@@ -70,15 +70,6 @@ Resources:
           KeyType: HASH
         - AttributeName: travelDate
           KeyType: RANGE
-      LocalSecondaryIndexes: 
-        - IndexName: cityIndex
-          KeySchema: 
-            - AttributeName: country
-              KeyType: HASH
-            - AttributeName: city
-              KeyType: RANGE
-          Projection:
-             ProjectionType: ALL
       BillingMode: PAY_PER_REQUEST              
 
 Outputs:

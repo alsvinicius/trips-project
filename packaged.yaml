@@ -7,7 +7,7 @@ Description: 'trip-project
 Globals:
   Function:
     MemorySize: 512
-    Timeout: 20
+    Timeout: 40
 Outputs:
   CreateTripFunction:
     Description: CreateTrip Lambda Function ARN

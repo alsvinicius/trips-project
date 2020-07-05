@@ -42,9 +42,9 @@ public class TripRepository {
 		final DynamoDBQueryExpression<Trip> queryExpression = new DynamoDBQueryExpression<Trip>()
 				.withKeyConditionExpression("country = :val1").withExpressionAttributeValues(eav);
 
-		final List<Trip> studies = mapper.query(Trip.class, queryExpression);
+		final List<Trip> trips = mapper.query(Trip.class, queryExpression);
 
-		return studies;
+		return trips;
 	}
 
 	public List<Trip> findByCity(final String country, final String city) {
@@ -54,8 +54,10 @@ public class TripRepository {
 		eav.put(":val2", new AttributeValue().withS(city));
 
 		final DynamoDBQueryExpression<Trip> queryExpression = new DynamoDBQueryExpression<Trip>()
-				.withIndexName("cityIndex").withConsistentRead(false)
-				.withKeyConditionExpression("country = :val1 and city=:val2").withExpressionAttributeValues(eav);
+				.withConsistentRead(false)
+				.withKeyConditionExpression("country = :val1")
+				.withFilterExpression("contains(city,:val2)")
+				.withExpressionAttributeValues(eav);
 
 		final List<Trip> trips = mapper.query(Trip.class, queryExpression);
 

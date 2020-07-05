@@ -3,7 +3,7 @@ version: '3.1'
 services:
   dynamo:
     image: amazon/dynamodb-local
-    container_name: study-datalake-dynamo
+    container_name: trips-dynamo
     ports:
       - "8000:8000"
     volumes:
