@@ -58,11 +58,7 @@ Resources:
       AttributeDefinitions:
       - AttributeName: country
         AttributeType: S
-      - AttributeName: city
-        AttributeType: S
       - AttributeName: travelDate
-        AttributeType: S
-      - AttributeName: reason
         AttributeType: S
       KeySchema:
       - AttributeName: country
