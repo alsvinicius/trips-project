@@ -1,13 +1,75 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'trip-project
+Transform: AWS::Serverless-2016-10-31
+Description: 'trips-project
 
-  Rest API to manage trips
+  Rest API to manage trips information
 
   '
 Globals:
   Function:
-    MemorySize: 512
     Timeout: 40
+    MemorySize: 512
+    Environment:
+      Variables:
+        TABLE_NAME:
+          Ref: TripTable
+        ENDPOINT_OVERRIDE: ''
+Resources:
+  CreateTripFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://trips-fiap-335430/7edabe7fb0901ef8d5c3e94300ed013e
+      Handler: br.com.iwe.handler.CreateTrip::handleRequest
+      Runtime: java8
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: TripTable
+      Events:
+        CreateTrip:
+          Type: Api
+          Properties:
+            Path: /trips
+            Method: post
+  GetTripsByCountryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://trips-fiap-335430/7edabe7fb0901ef8d5c3e94300ed013e
+      Handler: br.com.iwe.handler.GetTripsByCountry::handleRequest
+      Runtime: java8
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: TripTable
+      Events:
+        GetTripsByCountry:
+          Type: Api
+          Properties:
+            Path: /trips/{country}
+            Method: get
+          RequestParameters:
+          - method.request.querystring.city
+          - method.request.querystring.starts
+          - method.request.querystring.ends
+  TripTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: trip
+      AttributeDefinitions:
+      - AttributeName: country
+        AttributeType: S
+      - AttributeName: city
+        AttributeType: S
+      - AttributeName: travelDate
+        AttributeType: S
+      - AttributeName: reason
+        AttributeType: S
+      KeySchema:
+      - AttributeName: country
+        KeyType: HASH
+      - AttributeName: travelDate
+        KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
 Outputs:
   CreateTripFunction:
     Description: CreateTrip Lambda Function ARN
@@ -21,33 +83,3 @@ Outputs:
       Fn::GetAtt:
       - GetTripsByCountryFunction
       - Arn
-Resources:
-  CreateTripFunction:
-    Properties:
-      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
-      Events:
-        CreateTrip:
-          Properties:
-            Method: post
-            Path: /trip
-          Type: Api
-      Handler: br.com.iwe.handler.CreateTrip::handleRequest
-      Runtime: java8
-    Type: AWS::Serverless::Function
-  GetTripsByCountryFunction:
-    Properties:
-      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
-      Events:
-        GetTripsByCountry:
-          Properties:
-            Method: get
-            Path: /trips/{country}
-            RequestParameters:
-              - method.request.querystring.city
-              - method.request.querystring.starts
-              - method.request.querystring.ends
-          Type: Api
-      Handler: br.com.iwe.handler.GetTripsByCountry::handleRequest
-      Runtime: java8
-    Type: AWS::Serverless::Function
-Transform: AWS::Serverless-2016-10-31
