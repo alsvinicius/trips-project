@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    trips-project
+
+    Rest API to manage trips information
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+        Environment:
+          Variables:
+            TABLE_NAME: !Ref TripTable
+            ENDPOINT_OVERRIDE: ""
+
+Resources:
+
+  CreateTripFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-project-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.CreateTrip::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable     
+     Events:
+       CreateTrip:
+         Type: Api
+         Properties:
+           Path: /trips
+           Method: post
+              
+  GetTripsByCountryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-project-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GetTripsByCountry::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable     
+     Events:
+       GetTripsByCountry:
+         Type: Api
+         Properties:
+           Path: /trips/{country}
+           Method: get
+         RequestParameters:
+           - method.request.querystring.city
+           - method.request.querystring.starts
+           - method.request.querystring.ends
+              
+  TripTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: trip
+      AttributeDefinitions:
+        - AttributeName: country
+          AttributeType: S
+        - AttributeName: city
+          AttributeType: S
+        - AttributeName: travelDate
+          AttributeType: S
+        - AttributeName: reason
+          AttributeType: S            
+      KeySchema:
+        - AttributeName: country
+          KeyType: HASH
+        - AttributeName: travelDate
+          KeyType: RANGE
+      LocalSecondaryIndexes: 
+        - IndexName: cityIndex
+          KeySchema: 
+            - AttributeName: country
+              KeyType: HASH
+            - AttributeName: city
+              KeyType: RANGE
+          Projection:
+             ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST              
+
+Outputs:
+
+    CreateTripFunction:
+      Description: "CreateTrip Lambda Function ARN"
+      Value: !GetAtt CreateTripFunction.Arn
+      
+    GetTripsByCountryFunction:
+      Description: "GetTripsByCountry Lambda Function ARN"
+      Value: !GetAtt GetTripsByCountryFunction.Arn
+     

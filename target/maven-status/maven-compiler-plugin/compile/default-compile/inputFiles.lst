@@ -1,0 +1,7 @@
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\model\HandlerRequest.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\model\HandlerResponse.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\dao\TripRepository.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\dao\DynamoDBManager.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\handler\GetTripsByCountry.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\handler\CreateTrip.java
+C:\Users\lowvi\IdeaProjects\mba\serverless\study-datalake\src\main\java\br\com\iwe\model\Trip.java
